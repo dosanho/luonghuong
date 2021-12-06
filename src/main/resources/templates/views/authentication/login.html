@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" th:href="@{/user/authentication/css/login.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+<body>
+<div class="login-page">
+    <style>
+        .errorMessage {
+            color: red;
+        }
+    </style>
+    <div class="form">
+        <form class="login-form" id="login-form" method="post" action="/login">
+            <h2>Đăng nhập</h2>
+            <div class="form-login-input-page">
+                <input type="text" placeholder="username" name="username" id="username"/>
+                <span class="errorMessage"></span>
+            </div>
+            <div class="form-login-input-page">
+                <input type="password" placeholder="password" name="password" id="password"/>
+                <span class="errorMessage"></span>
+            </div>
+
+            <button type="submit">Đăng nhập</button>
+            <p>Bạn chưa có tài khoản? <a href="/register">Đăng ký</a></p>
+        </form>
+    </div>
+</div>
+
+<script th:src="@{/user/js/validation.js}"></script>
+<script>
+    validation({
+        form: "#login-form",
+        error: ".errorMessage",
+        formGroupSelector: '.form-login-input-page',
+        rules: [
+            validation.isRequired("#username", "vui lòng nhập tài khoản"),
+            validation.isRequired("#password", "vui lòng nhập mật khẩu"),
+            validation.isMinLength("#password",6 ,"mật khẩu phải lớn hơn 6 ký tự")
+        ],
+        onSubmit: function (data) {
+            document.getElementById("login-form").submit();
+        }
+    })
+</script>
+</body>
+</html>

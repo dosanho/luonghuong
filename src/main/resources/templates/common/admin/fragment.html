@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:fragment="main-fragment(title,headResources,mainContent,footResourses)">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="${title}">Home</title>
+    <!-- Theme style -->
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+
+
+
+    <!-- Core stylesheets -->
+    <link rel="stylesheet" th:href="@{/admin/css/bootstrap-material.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/shreerang-material.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/uikit.css}">
+
+
+
+    <th:block th:replace="${headResources} ?: ~{}"></th:block>
+
+
+</head>
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+<div id="wrapper">
+    <!-- [ Preloader ] Start -->
+    <div class="page-loader">
+        <div class="bg-primary"></div>
+    </div>
+    <!-- [ Preloader ] End -->
+
+    <div class="layout-wrapper layout-2">
+        <div class="layout-inner">
+            <div th:replace="~{/common/admin/sidebar :: sidebar-fragment}" th:remove="tag"></div>
+            <div class="layout-container">
+
+                <div th:replace="~{/common/admin/header :: header}" th:remove="tag"></div>
+
+                <div class="layout-content">
+                    <div th:replace="${mainContent} ?: ~{}" th:remove="tag"></div>
+
+                    <div th:replace="~{/common/admin/footer :: footerbar}" th:remove="tag"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layout-overlay layout-sidenav-toggle"></div>
+    </div>
+</div>
+    <!-- Core scripts -->
+    <script th:src="@{/admin/js/pace.js}"></script>
+    <script th:src="@{/admin/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/admin/libs/popper/popper.js}"></script>
+    <script th:src="@{/admin/js/bootstrap.js}"></script>
+    <script th:src="@{/admin/js/sidenav.js}"></script>
+    <script th:src="@{/admin/js/layout-helpers.js}"></script>
+    <script th:src="@{/admin/js/material-ripple.js}"></script>
+
+    <!-- Libs -->
+    <script src="/admin/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="/admin/libs/eve/eve.js"></script>
+    <script src="/admin/libs/flot/flot.js"></script>
+    <script src="/admin/libs/flot/curvedLines.js"></script>
+    <script src="/admin/libs/chart-am4/core.js"></script>
+    <script src="/admin/libs/chart-am4/charts.js"></script>
+    <script src="/admin/libs/chart-am4/animated.js"></script>
+
+    <!-- Demo -->
+    <script src="/admin/js/demo.js"></script><script src="/admin/js/analytics.js"></script>
+    <script src="/admin/js/pages/dashboards_index.js"></script>
+<th:block th:replace="${footResourses}"></th:block>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/common/admin/fragment :: main-fragment(
+                             ~{::title},
+                            ~{:: #headResources},
+                            ~{:: #mainContent},
+                             ~{:: #footResourses}
+                            )}">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin thêm sản phẩm</title>
+    <th:block id="headResources">
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </th:block>
+</head>
+<body>
+<div id="mainContent">
+    <style>
+        .title{
+            margin-top: 5rem;
+        }
+        .btn-add-product{
+            margin: 5rem 0;
+        }
+        .errorMessage{
+            color: red;
+        }
+    </style>
+    <div class="container-fluid">
+        <h1 class="text-center title">Thêm Sản phẩm</h1>
+        <form action="" method="get" id="form-them-san-pham">
+            <div class="form-group">
+                <label for="tenSanPham">Tên sản phẩm</label>
+                <input type="text" class="form-control" id="tenSanPham" placeholder="nhập tên sản phẩm" name="tenSanPham">
+                <span class="errorMessage"></span>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="giaBan">Giá bán sản phẩm</label>
+                        <input type="text" class="form-control" id="giaBan" placeholder="nhập giá bán" name="giaBan">
+                        <span class="errorMessage"></span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="giaNhap">Giá nhập sản phẩm</label>
+                        <input type="text" class="form-control" id="giaNhap" placeholder="nhập giá nhập" name="giaNhap">
+                        <span class="errorMessage"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                        <div class="form-group radio d-flex mt-2">
+                            <div class="p-1">Vui Lòng chọn kích hoạt:</div>
+                            <div class="d-flex">
+                                <div class="p-2">
+                                    <input type="radio" name="trangThai" id="co" value="1">
+                                    <label for="co">Có</label>
+                                </div>
+                                <div class="p-2">
+                                    <input type="radio" name="trangThai" id="khong" value="0">
+                                    <label for="khong">Không</label>
+                                </div>
+                            </div>
+                            <span class="errorMessage"></span>
+                        </div>
+
+
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="giaNhap">Giá nhập sản phẩm</label>
+                        <input type="text" class="form-control" id="giamGia" placeholder="nhập khuyến mãi" name="giamGia">
+                        <span class="errorMessage"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="m-file-anh">
+                    <img  id="m-product-img" src="/img/aothun.jpg"  alt="" srcset="" width="500px" height="500px">
+                </label>
+                <input type="file"  placeholder="nhập giá nhập" id="m-file-anh" accept="image/png, image/jpeg">
+                <input type="text"  placeholder="nhập tên sản phẩm" name="anh" id="m-loction-img">
+                <span class="errorMessage"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-3">
+                    <div class="form-group">
+                        <label for="loaiSPCha">Loại sản phẩm cha</label>
+                        <select class="form-control" id="loaiSPCha">
+                            <option value="">Chọn loại sản phẩm cha</option>
+                            <th:block th:each = "e : ${loaispcha}">
+                                <option th:value="${e.id}" th:utext="${e.tenLoaiSP}">danh mục</option>
+                            </th:block>
+                        </select>
+                        <span class="errorMessage"></span>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label for="loaiSP">Loại sản phẩm</label>
+                        <select class="form-control" name="loaiSP" id="loaiSP">
+                            <option value="">Chọn loại sản phẩm</option>
+                        </select>
+                        <span class="errorMessage"></span>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label for="thuongHieu">Thương hiệu sản phẩm</label>
+                        <select class="form-control" name="thuongHieu" id="thuongHieu">
+                            <option value="">Chọn loại Thương Hiệu</option>
+                            <th:block th:each = "e : ${thuonghieu}">
+                                <option th:value="${e.id}" th:utext="${e.tenThuongHieu}">danh mục</option>
+                            </th:block>
+                        </select>
+                        <span class="errorMessage"></span>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label for="sanPhamCha">Chọn sản phẩm cha</label>
+                        <select class="form-control" name="sanPhamCha" id="sanPhamCha">
+                            <option value="">Chọn loại Thương Hiệu</option>
+                            <option value="null">Sản phẩm cha</option>
+                            <th:block th:each = "e : ${sanphamcha}">
+                                <option th:value="${e.id}" th:utext="${e.tenSanPham}">danh mục</option>
+                            </th:block>
+                        </select>
+                        <span class="errorMessage"></span>
+                    </div>
+                </div>
+            </div>
+            <!--ĐĂC TRƯNG-->
+            <div class="text-center mt-5"><h3>Chọn đặc trưng sản phẩm</h3></div>
+            <div class="row mt-5">
+                <th:block th:each = "e : ${dactrung}">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="sanPhamCha" th:utext="${e.key}"></label>
+                            <select class="form-control loaiDacTrung" th:id="${e.key}">
+                                <option value="" th:text= "chọn +' '+ ${e.key}"></option>
+                                <th:block th:each = "detail : ${e.value}">
+                                    <option th:value="${detail.id}" th:utext="${detail.ten}">chọn chất liệu</option>
+                                </th:block>
+                            </select>
+                            <span class="errorMessage"></span>
+                        </div>
+                    </div>
+                </th:block>
+
+
+            </div>
+
+            <div class="d-flex justify-content-end btn-add-product">
+                <button type="submit" class="btn btn-dark" id="m-btn-add-product">Thêm sản phẩm</button>
+                <button type="button" class="btn btn-dark ml-5">Quay lại</button>
+            </div>
+        </form>
+    </div>
+</div>
+<th:block id="footResourses">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script th:src="@{/admin/js2/product.js}"></script>
+    <script th:src="@{/user/js/validation.js}"></script>
+
+
+</th:block>
+</body>
+</html>

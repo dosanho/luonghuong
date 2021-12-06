@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng ký</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/user/authentication/css/login.css}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body>
+<div class="login-page">
+    <style>
+        .errorMessage {
+            color: red;
+        }
+    </style>
+    <div class="form">
+        <form id="register-form-design" action="/register" method="post">
+            <h2>Đăng ký</h2>
+            <div class="form-group">
+                <input type="text" class="form-control" id="tendangnhap" placeholder="Tên đăng nhập" name="tenDangNhap">
+                <span class="errorMessage"></span>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" id="matkhau" placeholder="Mật khẩu" name="matKhau">
+                <span class="errorMessage"></span>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" id="matkhaulap" placeholder="Nhập lại mật khẩu" name="matKhauLap">
+                <span class="errorMessage"></span>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="hoten" placeholder="Họ và tên" name="hoTen">
+                <span class="errorMessage"></span>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="sdt" placeholder="Số điện thoại" name="sdt">
+                <span class="errorMessage"></span>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="email" placeholder="Email" name="email">
+                <span class="errorMessage"></span>
+            </div>
+
+            <button type="submit">Đăng ký</button>
+            <p>Bạn đã có tài khoản? <a href="/login">Đăng nhập</a></p>
+        </form>
+    </div>
+</div>
+
+<script th:src="@{/user/js/validation.js}"></script>
+<script>
+    validation({
+        form: "#register-form-design",
+        error: ".errorMessage",
+        formGroupSelector: '.form-group',
+        rules: [
+            validation.isRequired("#tendangnhap", "vui lòng nhập tài khoản"),
+            validation.isRequired("#matkhau", "vui lòng nhập mật khẩu"),
+            validation.isRequired("#sdt", "vui lòng nhập số điện thoại"),
+            validation.isRequired("#hoten", "vui lòng nhập họ tên"),
+            validation.isMinLength("#matkhau",6 ,"mật khẩu phải lớn hơn 6 ký tự"),
+            validation.isRequired("#matkhaulap","Nhập lại mật khẩu"),
+            validation.isPassword_confirm("#matkhaulap",()=>{
+                return document.querySelector('#register-form-design #matkhau').value
+            } , "vui lòng xác nhập lại mật khẩu"),
+            validation.isRequired("#email","Nhập email"),
+            validation.isEmail("#email","trường này phải là email")
+        ],
+        onSubmit: function (data) {
+            $.ajax({
+                url:"/register",
+                type:"post",
+                contentType:"application/json",
+                dataType:"json",
+                data:JSON.stringify(data),
+                success: function(results){
+                   if(results){
+                       Swal.fire(
+                           'Thêm thành công!',
+                           '',
+                           'success'
+                       ).then((result) => {
+                           if (result.isConfirmed) {
+                               window.location.href = "/login";
+                           }
+                       })
+                   } else {
+                       Swal.fire({
+                           icon: 'error',
+                           text: 'Tài khoản đã tồn tại',
+
+                       })
+                   }
+
+
+                },
+                error: function (result){
+
+                }
+            })
+        }
+    })
+</script>
+</body>
+</html>
