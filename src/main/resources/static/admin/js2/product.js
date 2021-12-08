@@ -65,7 +65,7 @@ $(document).ready(function () {
             validation.isSellThanEntry("#giaNhap",()=>{
                 return document.querySelector('#form-them-san-pham #giaBan').value
             } , "giá nhập phải nhỏ hơn giá bán"),
-            validation.isRequired("#m-file-anh","vui lòng chọn ảnh cho sản phẩm"),
+            validation.isRequired("#m-loction-img","vui lòng chọn ảnh cho sản phẩm"),
             validation.isRequired('#loaiSPCha',"Vui lòng chọn loại sản phẩm cha"),
             validation.isRequired('#loaiSP',"Vui lòng chọn loại sản phẩm"),
             validation.isRequired('#thuongHieu',"Vui lòng chọn thương hiệu"),
@@ -89,34 +89,78 @@ $(document).ready(function () {
                 if (e.value != "") speciality.push(e.value);
             })
             resutls['loaiDacTrung'] = speciality;
-            console.log(resutls)
-            $.ajax({
-                url:"/admin/api/sanpham",
-                type:"post",
-                contentType:"application/json",
-                dataType:"json",
-                data:JSON.stringify(resutls),
-                success: function(results){
-                    Swal.fire(
-                        'Thêm thành công!',
-                        '',
-                        'success'
-                    ).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = "/admin/product/add";
-                        }
-                    })
+            if (resutls['id']){
+                suaSanPham(resutls)
+            } else {
+                themSanPham(resutls)
+            }
 
-                },
-                error: function (result){
-                    Swal.fire({
-                        icon: 'error',
-                        text: 'Số lượng phải lớn hơn 0',
 
-                    })
-                }
-            })
+
         }
 
+    })
+
+    //thêm , sửa sản phẩm ajax của jquery
+    function themSanPham(resutls){
+        $.ajax({
+            url:"/admin/api/sanpham",
+            type:"post",
+            contentType:"application/json",
+            dataType:"json",
+            data:JSON.stringify(resutls),
+            success: function(results){
+                Swal.fire(
+                    'Thêm thành công!',
+                    '',
+                    'success'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/admin/product/add";
+                    }
+                })
+
+            },
+            error: function (result){
+                Swal.fire({
+                    icon: 'error',
+                    text: 'thêm thất bại',
+
+                })
+            }
+        })
+    }
+    function suaSanPham(resutls){
+        $.ajax({
+            url:"/admin/api/sanpham",
+            type:"put",
+            contentType:"application/json",
+            dataType:"json",
+            data:JSON.stringify(resutls),
+            success: function(results){
+                Swal.fire(
+                    'sửa thành công!',
+                    '',
+                    'success'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/admin/product";
+                    }
+                })
+
+            },
+            error: function (result){
+                Swal.fire({
+                    icon: 'error',
+                    text: 'sửa thất bại',
+
+                })
+            }
+        })
+    }
+
+    //click quay lại trang danh sách sản phẩm
+    $('.click-cancel').click(function (){
+        window.location.href = "/admin/product";
     })
 })

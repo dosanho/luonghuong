@@ -143,7 +143,7 @@ validation.isNumber = (selector,message) => {
         selector:selector,
         test : (value)=>{
             if (value != ""){
-                regex =  /^([1-9]\d*(\.)\d*|0?(\.)\d*[1-9]\d*|[1-9]\d*)$/
+                regex =  /^([0-9]\d*(\.)\d*|0?(\.)\d*[0-9]\d*|[0-9]\d*)$/
                 return regex.test(value) ? undefined : message || "trường này phải là số"
             }
         }
@@ -182,7 +182,7 @@ validation.isSellThanEntry = function(selector, getPriceSell , message){
     return {
         selector:selector,
         test:function(value){
-           if (value != ""){
+           if (value != "" && value != 0){
                return +value < +getPriceSell() ? undefined: message || `Giá nhập phải nhỏ hơn giá bán`
            }
         }

@@ -63,4 +63,24 @@ public class SanPhamEntity extends BaseEntity {
     private List<SanPhamDacTrungEntity> sanPhamDacTrungEntities = new ArrayList<>();
 
 
+    //    san pham _ chi tiết đơn đặt hàng
+    @OneToMany(mappedBy = "sanPhamEntityChiTietDDH")
+    @JsonIdentityReference(alwaysAsId = true) // show only id of Topic
+    private List<ChiTietDDHEntity> sanPhamEntityChiTietDDHs = new ArrayList<>();
+
+    //    san pham _ chi tiết phiếu nhập kho
+    @OneToMany(mappedBy = "sanPhamEntityChiTietPNK")
+    @JsonIdentityReference(alwaysAsId = true) // show only id of Topic
+    private List<ChiTietPNKEntity> sanPhamEntityChiTietPNKs = new ArrayList<>();
+
+    //    sản phẩm _ chi tiết sản phẩm
+    @OneToMany(mappedBy = "sanPhamEntityChiTietSP")
+    @JsonIdentityReference(alwaysAsId = true) // show only id of Topic
+    private List<ChiTietSPEntity> sanPhamEntityChiTietSPs = new ArrayList<>();
+
+
+    //    sản phẩm _ đánh giá
+    @OneToMany(mappedBy = "sanPhamEntityDanhGia")
+    @JsonIdentityReference(alwaysAsId = true) // show only id of Topic
+    private List<DanhGiaEntity> sanPhamEntityDanhGias = new ArrayList<>();
 }

@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    // tính tổng số page để phân trang
     function getPage(id){
         $.ajax({
             url:"/admin/api/sanpham/trang/"+id,
@@ -22,7 +23,7 @@ $(document).ready(function () {
             }
         })
     }
-
+    //phần trang tống số trang và id sản phẩm chuyển vào
     function pagination(totalPage,id){
         $(function () {
             window.pagObj = $('#pagination').twbsPagination({
@@ -52,10 +53,10 @@ $(document).ready(function () {
                                       <td>${toMoney(e.giaNhap)}</td>
                                     <td>${e.trangThai}</td>
                                     <td>
-                                        <div class="d-flex justify-content-center tacvu">
-                                            <button type="button" ><i class="far fa-edit"></i></button>
-                                            <button type="button"><i class="fas fa-trash-alt"></i></button>
-                                            <button data-id="${e.id}" class="m-icon-click-to-child" type="button"><i class="fas fa-folder-plus"></i></button>
+                                        <div class="d-flex justify-content-center tacvu" data-id="${e.id}">
+                                            <button  type="button" class="m-icon-click-to-edit"><i class="far fa-edit"></i></button>
+                                            <button type="button" class="m-icon-click-to-delete""><i class="fas fa-trash-alt"></i></button>
+                                            <button class="m-icon-click-to-child" type="button"><i class="fas fa-folder-plus"></i></button>
                                         </div>
                                     </td>
                                 </tr>`
@@ -69,21 +70,28 @@ $(document).ready(function () {
         });
     }
 
-    getPage("")
 
+
+    // lấy ra sản phẩm con của id
     $(document).on('click','.m-icon-click-to-child',function (){
-        let id = $(this).attr("data-id")
-
+        let id = $(this).parents().attr("data-id")
         getPage(id)
 
     })
+    // quay lại trang đầu
     $(document).on('click','.btn-cancel-to-product-previous',function (){
-        let id = $(this).attr("data-id")
+        let id = $(this).parents().attr("data-id")
         getPage(id)
 
     })
+    // click chuyển sang trang sửa
+    $(document).on('click',".m-icon-click-to-edit",function (){
+        let id = $(this).parents().attr("data-id")
+        console.log(id)
+        window.location.href = "/admin/product/add/"+id;
+    })
 
-
+// chuyển number -> dạng tiền việt nam
     function toMoney(totalprice){
         return totalprice.toLocaleString('it-IT', {
             style: 'currency',
@@ -91,4 +99,35 @@ $(document).ready(function () {
         });
     }
 
+    getPage("")
+    //xoá sản phẩm
+    $(document).on('click','.m-icon-click-to-delete',function (){
+        let id = $(this).parents().attr("data-id")
+        $.ajax({
+            url:"/admin/api/sanpham",
+            type:"delete",
+            contentType:"application/json",
+            dataType:"json",
+            data:JSON.stringify(id),
+            success: function(results){
+                Swal.fire(
+                    'xoá thành công!',
+                    '',
+                    'success'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/admin/product";
+                    }
+                })
+
+            },
+            error: function (result){
+                Swal.fire({
+                    icon: 'error',
+                    text: 'xoá thất bại',
+
+                })
+            }
+        })
+    })
 })

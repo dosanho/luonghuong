@@ -2,6 +2,7 @@ package com.example.luonghuong.service.impl;
 
 import com.example.luonghuong.dto.request.SanPhamRequest;
 import com.example.luonghuong.dto.response.SanPhamDTO;
+import com.example.luonghuong.dto.response.SanPhanSuaDTO;
 import com.example.luonghuong.entity.*;
 import com.example.luonghuong.repository.*;
 import com.example.luonghuong.service.SanPhamService;
@@ -44,9 +45,6 @@ public class SanPhamServiceImpl implements SanPhamService {
             // tìm xem có sản phẩm con ko
             List<SanPhamEntity> check = this.sanPhamRepository.findAllByMaSanPhamChaSP(sanPhamCha.get(i));
             if (check.size() != 0){
-                check.forEach(e->{
-                    e.setTenSanPham("----"+e.getTenSanPham());
-                });
                 sanPhamEntities.addAll(check);
 
             }
@@ -64,8 +62,19 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public Long themSanPham(SanPhamRequest request) {
-//        tạo 1 đối tương sanPhamEntity
-        SanPhamEntity sanPhamEntity = new SanPhamEntity();
+
+        SanPhamEntity sanPhamEntity = null;
+        // nếu id == null thì   tạo 1 đối tương sanPhamEntity
+        if (request.getId() == null){
+            sanPhamEntity  = new SanPhamEntity();
+        }
+        //        nếu id != null thì  thì đối tương id đó
+        else {
+            sanPhamEntity = this.sanPhamRepository.findById(request.getId()).get();
+            //   xoá hết đặc trung sản phẩm đi
+            this.sanPhamDacTrungRepository.deleteAllByMaSanPham(sanPhamEntity);
+
+        }
 
         sanPhamEntity.setTenSanPham(request.getTenSanPham());
         sanPhamEntity.setAnh(request.getAnh());
@@ -77,6 +86,10 @@ public class SanPhamServiceImpl implements SanPhamService {
         if (request.getSanPhamCha() != null){
             SanPhamEntity sanPhamCha = this.sanPhamRepository.findById(request.getSanPhamCha()).get();
             sanPhamEntity.setMaSanPhamChaSP(sanPhamCha);
+        }
+//        nếu = null set nut
+        else {
+            sanPhamEntity.setMaSanPhamChaSP(null);
         }
 
 
@@ -106,16 +119,25 @@ public class SanPhamServiceImpl implements SanPhamService {
 //            thực hiện insert giá trị vào bảng đặc trưng sản phẩm trong database
             sanPhamDacTrungRepository.save(sanPhamDacTrungEntity);
         });
+        //trả về id
         return result.getId();
     }
+
+//    xoá sản phẩm
+    @Override
+    public void xoaSanPham(Long id) {
+        // tìm sản phẩm có id truyền vào
+        SanPhamEntity sanPhamEntity = this.sanPhamRepository.findById(id).get();
+    }
+
 
     @Override
     public Integer tinhTrang(Long id) {
         if (id != null){
             SanPhamEntity sanPhamEntity = this.sanPhamRepository.findById(id).get();
-            return (int)Math.ceil(((float)sanPhamRepository.countByMaSanPhamChaSP(sanPhamEntity))/2);
+            return (int)Math.ceil(((float)sanPhamRepository.countByMaSanPhamChaSP(sanPhamEntity))/6);
         } else {
-            return (int)Math.ceil(((float)sanPhamRepository.countByMaSanPhamChaSP(null))/2);
+            return (int)Math.ceil(((float)sanPhamRepository.countByMaSanPhamChaSP(null))/6);
         }
     }
 
@@ -150,6 +172,28 @@ public class SanPhamServiceImpl implements SanPhamService {
         return sanPhamDTOS;
     }
 
+    @Override
+    public SanPhanSuaDTO findById(Long id) {
+//        tìm Sản phẩm dạng Entity theo id
+        SanPhamEntity entity = this.sanPhamRepository.findById(id).get();
+//        tìm tên loại sản phẩm con
+
+//        sử dụng mẫu builder dto để chuyển từ entity->dto
+        SanPhanSuaDTO dto = SanPhanSuaDTO.builder()
+                .id(entity.getId())
+                .tenSanPham(entity.getTenSanPham())
+                .anh(entity.getAnh())
+                .maThuongHieu(entity.getMaThuongHieuSP().getId())
+                .giaBan(entity.getGiaBan())
+                .giaNhap(entity.getGiaNhap())
+                .trangThai(entity.getTrangThai())
+                .giamGia(entity.getGiamGia())
+                .maSanPhamCha(entity.getMaSanPhamChaSP() == null ? null :entity.getMaSanPhamChaSP().getId())
+                .maLoaiCon(entity.getMaLoaiSanPhamSP().getId())
+                .maLoaiCha(entity.getMaLoaiSanPhamSP().getMaLoaiSPCha().getId())
+                .build();
+        return dto;
+    }
 
 
 }

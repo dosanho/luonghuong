@@ -13,6 +13,8 @@ import java.util.Objects;
 @ToString
 @Builder
 public class SanPhamRequest {
+
+    private Long id;
     @NotBlank
     private String tenSanPham;
 

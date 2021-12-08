@@ -3,23 +3,19 @@ package com.example.luonghuong.dto.response;
 import lombok.Builder;
 import lombok.Data;
 
-
 import java.math.BigDecimal;
 
 @Data
 @Builder
-public class SanPhamDTO {
-
+public class SanPhanSuaDTO {
     private Long id;
 
     private String tenSanPham;
 
+    private Long maThuongHieu;
 
-    private String tenThuongHieu;
-
-
-    private String tenLoai;
-
+    private Long maLoaiCha;
+    private Long maLoaiCon;
 
     private BigDecimal giaNhap;
 
