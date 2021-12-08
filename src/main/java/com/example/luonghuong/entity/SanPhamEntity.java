@@ -3,6 +3,7 @@ package com.example.luonghuong.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

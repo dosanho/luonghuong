@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "chitietsp")
+@Table(name = "danhgia")
 public class DanhGiaEntity extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "masanpham", nullable = false)
@@ -29,7 +29,7 @@ public class DanhGiaEntity extends BaseEntity{
     private String xepHang;
 
     @Column(name = "mota")
-    private String moTa;
+    private String moTaHehe;
 
     @Column(name = "tthienthi")
     private Integer ttHienThi;

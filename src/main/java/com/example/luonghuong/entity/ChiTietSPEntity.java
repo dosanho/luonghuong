@@ -19,7 +19,7 @@ public class ChiTietSPEntity extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "masanpham", nullable = false)
     @JsonIdentityReference(alwaysAsId = true) // show only id of Topic
-    private TaiKhoanEntity sanPhamEntityChiTietSP;
+    private SanPhamEntity sanPhamEntityChiTietSP;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mactphieunhap", nullable = false)

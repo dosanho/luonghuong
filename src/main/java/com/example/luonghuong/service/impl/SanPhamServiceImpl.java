@@ -34,6 +34,18 @@ public class SanPhamServiceImpl implements SanPhamService {
     //dependecy inject
     private final DacTrungRepository dacTrungRepository;
 
+    //dependecy inject
+    private final DanhGiaRepository danhGiaRepository;
+
+    //dependecy inject
+    private final ChiTietPNKRepository chiTietPNKRepository;
+
+    //dependecy inject
+    private final ChiTietDDHRepository chiTietDDHRepository;
+
+    //dependecy inject
+    private final ChiTietSPRepository chiTietSPRepository;
+    //get san phẩm
     @Override
     public List<SanPhamDTO> getProductOne() {
         // lấy ra hết sản phẩm cha
@@ -59,7 +71,7 @@ public class SanPhamServiceImpl implements SanPhamService {
         });
         return results;
     }
-
+    //thêm sản phẩm
     @Override
     public Long themSanPham(SanPhamRequest request) {
 
@@ -125,9 +137,54 @@ public class SanPhamServiceImpl implements SanPhamService {
 
 //    xoá sản phẩm
     @Override
-    public void xoaSanPham(Long id) {
+    public Boolean xoaSanPham(Long id) {
+
         // tìm sản phẩm có id truyền vào
         SanPhamEntity sanPhamEntity = this.sanPhamRepository.findById(id).get();
+
+        // danh sách sản phẩm cha
+        List<SanPhamEntity> sanPhamChaEntity = new ArrayList<>();
+        //  tìm ra sản phẩm con của nó
+        List<SanPhamEntity> sanPhamEntities = this.sanPhamRepository.findAllByMaSanPhamChaSP(sanPhamEntity);
+        if (sanPhamEntities.size() > 0){
+            for (int i = 0; i < sanPhamEntities.size(); i++) {
+                List<SanPhamEntity> sanPhamConEntities = this.sanPhamRepository
+                                                        .findAllByMaSanPhamChaSP(sanPhamEntities.get(i));
+                if (sanPhamConEntities.size() > 0){
+                    sanPhamChaEntity.add(sanPhamEntities.get(i));
+                    sanPhamEntities.addAll(i+1,sanPhamConEntities);
+                } else {
+                    delete(sanPhamEntities.get(i));
+                }
+            }
+        }
+
+        if (sanPhamChaEntity.size() > 0 ){
+            sanPhamChaEntity.forEach(e->{
+                delete(e);
+            });
+        }
+
+        delete(sanPhamEntity);
+
+        return true;
+    }
+
+    // xoá 4 bảng có chứa mã sản phẩm
+
+    public void delete(SanPhamEntity sanPhamEntity){
+        // xoá bản ghi trong bảng chi tiết sản phẩm đầu tiên
+        this.chiTietSPRepository.deleteAllBySanPhamEntityChiTietSP(sanPhamEntity);
+        // xoá bản ghi bảng chi tiết phiếu nhập kho
+        this.chiTietPNKRepository.deleteAllBySanPhamEntityChiTietPNK(sanPhamEntity);
+        // xoá bản ghi bảng chỉ tiết ddh
+        this.chiTietDDHRepository.deleteAllBySanPhamEntityChiTietDDH(sanPhamEntity);
+        // xoá bản ghi bảng đánh giá
+        this.danhGiaRepository.deleteAllBySanPhamEntityDanhGia(sanPhamEntity);
+        // xoá bản đặc trưng
+        this.sanPhamDacTrungRepository.deleteAllByMaSanPham(sanPhamEntity);
+        // xoá bản ghi bảng sản phẩm
+        this.sanPhamRepository.deleteById(sanPhamEntity.getId());
     }
 
 

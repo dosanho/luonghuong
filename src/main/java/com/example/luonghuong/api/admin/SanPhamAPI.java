@@ -59,9 +59,9 @@ public class SanPhamAPI {
     }
 
     @DeleteMapping("/sanpham")
-    public Long deleteSanPham(@RequestBody Long id) throws Exception {
+    public Boolean deleteSanPham(@RequestBody Long id) throws Exception {
         System.out.println(id);
-        return null;
+        return this.sanPhamService.xoaSanPham(id);
     }
 
 }

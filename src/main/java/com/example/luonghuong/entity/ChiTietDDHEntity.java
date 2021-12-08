@@ -29,7 +29,7 @@ public class ChiTietDDHEntity extends BaseEntity{
     @Column(name = "soluong")
     private Integer soLuong;
 
-    @Column(name = "giaBan")
+    @Column(name = "giaban")
     private BigDecimal giaBan;
 
     @Column(name = "tongtien")

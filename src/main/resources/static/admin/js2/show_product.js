@@ -80,7 +80,7 @@ $(document).ready(function () {
     })
     // quay lại trang đầu
     $(document).on('click','.btn-cancel-to-product-previous',function (){
-        let id = $(this).parents().attr("data-id")
+        let id = $(this).attr("data-id")
         getPage(id)
 
     })
@@ -103,31 +103,48 @@ $(document).ready(function () {
     //xoá sản phẩm
     $(document).on('click','.m-icon-click-to-delete',function (){
         let id = $(this).parents().attr("data-id")
-        $.ajax({
-            url:"/admin/api/sanpham",
-            type:"delete",
-            contentType:"application/json",
-            dataType:"json",
-            data:JSON.stringify(id),
-            success: function(results){
-                Swal.fire(
-                    'xoá thành công!',
-                    '',
-                    'success'
-                ).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "/admin/product";
+        Swal.fire({
+            title: 'Bạn chắc chắn muốn xoá không?',
+            icon: 'warning',
+            showCancelButton: true,
+
+            confirmButtonText: 'Có'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url:"/admin/api/sanpham",
+                    type:"delete",
+                    contentType:"application/json",
+                    dataType:"json",
+                    data:JSON.stringify(id),
+                    success: function(results){
+                        Swal.fire(
+                            'xoá thành công!',
+                            '',
+                            'success'
+                        ).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "/admin/product";
+                            }
+                        })
+
+                    },
+                    error: function (result){
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'xoá thất bại',
+
+                        })
                     }
                 })
-
-            },
-            error: function (result){
-                Swal.fire({
-                    icon: 'error',
-                    text: 'xoá thất bại',
-
-                })
+                Swal.fire(
+                    'Xoá thành công!',
+                    '',
+                    'success'
+                )
+                getPage(id)
             }
         })
     })
 })
+

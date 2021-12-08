@@ -13,7 +13,7 @@ public interface SanPhamService {
 //    thêm sản phẩm
     Long themSanPham(SanPhamRequest sanPhamRequest);
 //    xoá sản phẩm
-    void xoaSanPham(Long id);
+    Boolean xoaSanPham(Long id);
 //    trả về số trang
     Integer tinhTrang(Long id);
 //    phân trang bảng sản phẩm
