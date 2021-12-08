@@ -48,15 +48,15 @@ public class TaiKhoanEntity extends BaseEntity{
     //    mapping đơn đặt hàng mã tài khoản 1
     @OneToMany(mappedBy = "maTaiKhoan1DDH")
     @JsonIdentityReference(alwaysAsId = true) // show only id of Topic
-    private List<PhieuNhapKhoEntity> maTaiKhoan1DDH = new ArrayList<>();
+    private List<DonDatHangEntity> maTaiKhoan1DDHs = new ArrayList<>();
 
     //    mapping đơn đặt hàng mã tài khoản 2
     @OneToMany(mappedBy = "maTaiKhoan2DDH")
     @JsonIdentityReference(alwaysAsId = true) // show only id of Topic
-    private List<PhieuNhapKhoEntity> maTaiKhoan2DDH = new ArrayList<>();
+    private List<DonDatHangEntity> maTaiKhoan2DDHs = new ArrayList<>();
 
     //    tài khoản - đánh giá
     @OneToMany(mappedBy = "taiKhoanEntityDanhGia")
     @JsonIdentityReference(alwaysAsId = true) // show only id of Topic
-    private List<PhieuNhapKhoEntity> taiKhoanEntityDanhGias = new ArrayList<>();
+    private List<DanhGiaEntity> taiKhoanEntityDanhGias = new ArrayList<>();
 }
