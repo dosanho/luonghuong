@@ -53,7 +53,7 @@ public class SanPhamEntity extends BaseEntity {
     @Column(name = "giamgia")
     private Integer giamGia;
 
-    //    đại quy
+    //    đệ quy
     @OneToMany(mappedBy = "maSanPhamChaSP")
     @JsonIdentityReference(alwaysAsId = true) // show only id of Topic
     private List<SanPhamEntity> sanPhamConEntities = new ArrayList<>();

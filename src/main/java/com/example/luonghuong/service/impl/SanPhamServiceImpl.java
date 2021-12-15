@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -80,21 +81,19 @@ public class SanPhamServiceImpl implements SanPhamService {
         if (request.getId() == null){
             sanPhamEntity  = new SanPhamEntity();
         }
-        //        nếu id != null thì  thì đối tương id đó
+        // nếu id != null thì  thì đối tương id đó
         else {
             sanPhamEntity = this.sanPhamRepository.findById(request.getId()).get();
             //   xoá hết đặc trung sản phẩm đi
             this.sanPhamDacTrungRepository.deleteAllByMaSanPham(sanPhamEntity);
-
         }
-
         sanPhamEntity.setTenSanPham(request.getTenSanPham());
         sanPhamEntity.setAnh(request.getAnh());
         sanPhamEntity.setTrangThai(request.getTrangThai());
         sanPhamEntity.setGiaBan(request.getGiaBan());
         sanPhamEntity.setGiaNhap(request.getGiaNhap());
         sanPhamEntity.setGiamGia(request.getGiamGia());
-//        tim ra sản phẩm tra và set vào sanPhamEntity
+//        tim ra sản phẩm cha và set vào sanPhamEntity
         if (request.getSanPhamCha() != null){
             SanPhamEntity sanPhamCha = this.sanPhamRepository.findById(request.getSanPhamCha()).get();
             sanPhamEntity.setMaSanPhamChaSP(sanPhamCha);
@@ -104,11 +103,15 @@ public class SanPhamServiceImpl implements SanPhamService {
             sanPhamEntity.setMaSanPhamChaSP(null);
         }
 
-
 //        tìm thương hiệu đã chọn
 //        set vào sanPhamEntity
-        ThuongHieuEntity thuongHieuEntity = thuongHieuRepository.findById(request.getThuongHieu()).get();
-        sanPhamEntity.setMaThuongHieuSP(thuongHieuEntity);
+        if(request.getThuongHieu() != null){
+            ThuongHieuEntity thuongHieuEntity = thuongHieuRepository.findById(request.getThuongHieu()).get();
+            sanPhamEntity.setMaThuongHieuSP(thuongHieuEntity);
+        } else {
+            sanPhamEntity.setMaThuongHieuSP(null);
+        }
+
 
 //      tìm loại sản phẩm đã chọn
 //        set vào sanPhamEntity
@@ -140,33 +143,33 @@ public class SanPhamServiceImpl implements SanPhamService {
     public Boolean xoaSanPham(Long id) {
 
         // tìm sản phẩm có id truyền vào
-        SanPhamEntity sanPhamEntity = this.sanPhamRepository.findById(id).get();
-
-        // danh sách sản phẩm cha
-        List<SanPhamEntity> sanPhamChaEntity = new ArrayList<>();
-        //  tìm ra sản phẩm con của nó
-        List<SanPhamEntity> sanPhamEntities = this.sanPhamRepository.findAllByMaSanPhamChaSP(sanPhamEntity);
-        if (sanPhamEntities.size() > 0){
-            for (int i = 0; i < sanPhamEntities.size(); i++) {
-                List<SanPhamEntity> sanPhamConEntities = this.sanPhamRepository
-                                                        .findAllByMaSanPhamChaSP(sanPhamEntities.get(i));
-                if (sanPhamConEntities.size() > 0){
-                    sanPhamChaEntity.add(sanPhamEntities.get(i));
-                    sanPhamEntities.addAll(i+1,sanPhamConEntities);
-                } else {
-                    delete(sanPhamEntities.get(i));
+        Optional<SanPhamEntity> sanPhamEntity = this.sanPhamRepository.findById(id);
+        // kiểm tra sản phẩm vừa tìm đc có rỗng không(empty) nếu không rỗng thì xoá các thứ liên quan
+        if (sanPhamEntity.isPresent()){
+            // danh sách sản phẩm cha
+            List<SanPhamEntity> sanPhamChaEntity = new ArrayList<>();
+            //  tìm ra sản phẩm con của nó
+            List<SanPhamEntity> sanPhamEntities = this.sanPhamRepository.findAllByMaSanPhamChaSP(sanPhamEntity.get());
+            if (sanPhamEntities.size() > 0){
+                for (int i = 0; i < sanPhamEntities.size(); i++) {
+                    // tìm sản phẩm con của thằng thứ i
+                    List<SanPhamEntity> sanPhamConEntities = this.sanPhamRepository
+                            .findAllByMaSanPhamChaSP(sanPhamEntities.get(i));
+                    if (sanPhamConEntities.size() > 0){
+                        sanPhamChaEntity.add(0,sanPhamEntities.get(i));
+                        sanPhamEntities.addAll(i+1,sanPhamConEntities);
+                    } else {
+                        delete(sanPhamEntities.get(i));
+                    }
                 }
             }
+            if (sanPhamChaEntity.size() > 0 ){
+                sanPhamChaEntity.forEach(e->{
+                    delete(e);
+                });
+            }
+            delete(sanPhamEntity.get());
         }
-
-        if (sanPhamChaEntity.size() > 0 ){
-            sanPhamChaEntity.forEach(e->{
-                delete(e);
-            });
-        }
-
-        delete(sanPhamEntity);
-
         return true;
     }
 
@@ -181,7 +184,7 @@ public class SanPhamServiceImpl implements SanPhamService {
         this.chiTietDDHRepository.deleteAllBySanPhamEntityChiTietDDH(sanPhamEntity);
         // xoá bản ghi bảng đánh giá
         this.danhGiaRepository.deleteAllBySanPhamEntityDanhGia(sanPhamEntity);
-        // xoá bản đặc trưng
+        // xoá bản đặc trưng sản phẩm
         this.sanPhamDacTrungRepository.deleteAllByMaSanPham(sanPhamEntity);
         // xoá bản ghi bảng sản phẩm
         this.sanPhamRepository.deleteById(sanPhamEntity.getId());
@@ -213,13 +216,13 @@ public class SanPhamServiceImpl implements SanPhamService {
         }
         // tạo ra list dto lưu chữ kết quá
         List<SanPhamDTO> sanPhamDTOS = new ArrayList<>();
-        // sửa dùng mẫu bulder để chuyển từ entity -> dto
+        // sửa dùng mẫu builder để chuyển từ entity -> dto
         pageResultEntity.forEach(e->{
             SanPhamDTO dto = SanPhamDTO.builder()
                     .id(e.getId())
                     .tenSanPham(e.getTenSanPham())
                     .anh(e.getAnh()).tenLoai(e.getMaLoaiSanPhamSP().getTenLoaiSP())
-                    .tenThuongHieu(e.getMaThuongHieuSP().getTenThuongHieu())
+                    .tenThuongHieu(e.getMaThuongHieuSP() != null ? e.getMaThuongHieuSP().getTenThuongHieu() : "Sản phẩm cha")
                     .giaBan(e.getGiaBan()).giaNhap(e.getGiaNhap())
                     .trangThai(e.getTrangThai()).build();
             // sau đó add list dto "sanPhamDTOS"
@@ -240,7 +243,7 @@ public class SanPhamServiceImpl implements SanPhamService {
                 .id(entity.getId())
                 .tenSanPham(entity.getTenSanPham())
                 .anh(entity.getAnh())
-                .maThuongHieu(entity.getMaThuongHieuSP().getId())
+                .maThuongHieu(entity.getMaThuongHieuSP() != null ? entity.getMaThuongHieuSP().getId() : null)
                 .giaBan(entity.getGiaBan())
                 .giaNhap(entity.getGiaNhap())
                 .trangThai(entity.getTrangThai())

@@ -20,7 +20,7 @@ public class SanPhamAPI {
 
     private final SanPhamService sanPhamService;
 
-//    tính ra tổng trang mình
+//    tính ra số trang mình
     @GetMapping({"/sanpham/trang","/sanpham/trang/{id}"})
     public Integer getPageProduct(@PathVariable(value = "id",required = false) Long id){
         return this.sanPhamService.tinhTrang(id);
@@ -60,7 +60,6 @@ public class SanPhamAPI {
 
     @DeleteMapping("/sanpham")
     public Boolean deleteSanPham(@RequestBody Long id) throws Exception {
-        System.out.println(id);
         return this.sanPhamService.xoaSanPham(id);
     }
 

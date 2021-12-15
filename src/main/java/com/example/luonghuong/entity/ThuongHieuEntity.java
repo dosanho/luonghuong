@@ -22,6 +22,10 @@ public class ThuongHieuEntity  extends BaseEntity {
     @Column(name = "hinhanh")
     private String hinhAnh;
 
+
+    @Column(name = "trangthai")
+    private Integer trangThai;
+
     //    mapping san pham
     @OneToMany(mappedBy = "maThuongHieuSP")
     @JsonIdentityReference(alwaysAsId = true) // show only id of Topic

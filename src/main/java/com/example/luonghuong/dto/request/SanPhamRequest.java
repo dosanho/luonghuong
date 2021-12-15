@@ -21,7 +21,7 @@ public class SanPhamRequest {
     @NotNull
     private Long loaiSP;
 
-    @NotNull
+
     private Long thuongHieu;
 
     @NotNull

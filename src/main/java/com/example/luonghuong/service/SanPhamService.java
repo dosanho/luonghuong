@@ -21,6 +21,4 @@ public interface SanPhamService {
 
 //    tìm sản phẩm theo id
     SanPhanSuaDTO findById(Long id);
-
-
 }

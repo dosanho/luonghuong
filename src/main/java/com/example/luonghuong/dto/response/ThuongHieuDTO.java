@@ -17,4 +17,6 @@ public class ThuongHieuDTO {
     private String moTa;
 
     private String hinhAnh;
+
+    private Integer trangThai;
 }

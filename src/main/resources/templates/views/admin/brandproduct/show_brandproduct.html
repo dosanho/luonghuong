@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/common/admin/fragment :: main-fragment(
+                             ~{::title},
+                            ~{:: #headResources},
+                            ~{:: #mainContent},
+                             ~{:: #footResourses}
+                            )}">
+<head>
+    <meta charset="UTF-8">
+    <title>hiển thị sản phẩm</title>
+    <th:block id="headResources">
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+              integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </th:block>
+</head>
+<body>
+<div id="mainContent">
+    <style>
+        .anh-sanpham{
+            width: 5rem;
+            height: 5rem;
+        }
+
+        .tacvu>button{
+            margin:0 .5rem;
+            border: none;
+            background-color: #fff;
+        }
+        .add-product{
+            margin-top: 5rem;
+        }
+        .btn-cancel-to-product-previous{
+            height: 35px;
+            border: none;
+            background-color: black;
+        }
+        .btn-cancel-to-product-previous>i{
+            color: #fff;
+        }
+    </style>
+    <div class="container-fluid add-product">
+        <div class="row d-flex justify-content-between mt-5">
+
+            <div class="form-group d-flex col-6">
+                <button type="button" class="btn-cancel-to-product-previous" data-id=""><i class="fas fa-arrow-left"></i></button>
+                <input type="email" class="form-control" id="search" placeholder="nhập tên sản phẩm">
+                <button type="button" style="background-color: #fff; border: none"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="form-group d-flex col-2">
+                <a class="btn btn-dark" th:href="@{/admin/brand/add}">Thêm Thương Hiệu</a>
+            </div>
+
+        </div>
+        <div class="mt-5">
+            <table class="table" style="text-align: center; ">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">stt</th>
+                    <th scope="col">Tên</th>
+                    <th scope="col">Mô tả</th>
+                    <th scope="col">Ảnh</th>
+                    <th scope="col">Tác vụ</th>
+                </tr>
+                </thead>
+                <tbody id="list-show-product">
+
+
+                </tbody>
+            </table>
+
+        </div>
+        <div class="container w-100 mt-5 mb-5" id="pagination-container">
+            <nav aria-label="Page navigation" class="d-flex justify-content-center">
+                <ul class="pagination" id="pagination"></ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<th:block id="footResourses">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script th:src="@{/user/pagination/jquery.twbsPagination.js}" type="text/javascript"></script>
+    <script th:src="@{/admin/js2/show_brand.js}"></script>
+</th:block>
+</body>
+</html>

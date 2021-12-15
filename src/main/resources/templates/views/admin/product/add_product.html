@@ -156,7 +156,7 @@
                         <label for="thuongHieu">Thương hiệu sản phẩm</label>
                         <select class="form-control" name="thuongHieu" id="thuongHieu">
                             <option value="">Chọn loại Thương Hiệu</option>
-
+                            <option value="null">Là Sản phẩm cha</option>
                             <!--start - nếu sửa sản phẩm-->
                             <th:block th:if="${sanpham}" th:each = "e : ${thuonghieu}">
                                 <th:block th:if="${sanpham.maThuongHieu} == ${e.id}">

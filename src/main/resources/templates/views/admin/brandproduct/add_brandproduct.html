@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/common/admin/fragment :: main-fragment(
+                             ~{::title},
+                            ~{:: #headResources},
+                            ~{:: #mainContent},
+                             ~{:: #footResourses}
+                            )}">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin thêm sản phẩm</title>
+    <th:block id="headResources">
+
+        <script th:src="@{/ckeditor/ckeditor/ckeditor.js}"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </th:block>
+</head>
+<body>
+<div id="mainContent">
+    <style>
+        .title{
+            margin-top: 5rem;
+        }
+        .btn-add-product{
+            margin: 5rem 0;
+        }
+        .errorMessage{
+            color: red;
+        }
+    </style>
+    <div class="container-fluid">
+        <h1 class="text-center title" th:text="${banner}">Thêm Thương Hiệu</h1>
+        <form  id="form-thuong-hieu">
+            <input type="text" readonly name="id" th:value="${brand}?${brand.id}:null">
+            <div class="form-group">
+                <label for="tenThuongHieu">Tên Thương Hiệu</label>
+                <input type="text" class="form-control" id="tenThuongHieu" placeholder="nhập tên thương hiệu"
+                       name="tenThuongHieu" th:value="${brand}?${brand.tenThuongHieu}:null">
+                <span class="errorMessage"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group radio d-flex mt-2">
+                        <div class="p-1">Vui Lòng chọn kích hoạt:</div>
+                        <div class="d-flex">
+                            <!--nếu sứa-->
+                            <th:block th:if="${brand}">
+                                <div class="p-2">
+                                    <input type="radio" name="trangThai" id="co" value="1" th:checked="${brand.trangThai}==1">
+                                    <label for="co">Có</label>
+                                </div>
+                                <div class="p-2">
+                                    <input type="radio" name="trangThai" id="khong" value="0"  th:checked="${brand.trangThai}==0">
+                                    <label for="khong">Không</label>
+                                </div>
+                            </th:block>
+                            <!--end-->
+                            <!--nếu thêm-->
+                            <th:block th:unless="${brand}">
+                                <div class="p-2">
+                                    <input type="radio" name="trangThai" id="co" value="1" >
+                                    <label for="co">Có</label>
+                                </div>
+                                <div class="p-2">
+                                    <input type="radio" name="trangThai" id="khong" value="0">
+                                    <label for="khong">Không</label>
+                                </div>
+                            </th:block>
+                            <!--end-->
+                        </div>
+                        <span class="errorMessage"></span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="m-file-anh">
+                    <img  id="m-brand-img"  alt="" srcset="" width="300px" height="300px" th:src="${brand}?${brand.hinhAnh}:null">
+                </label>
+                <input type="file"  id="m-file-anh" accept="image/png, image/jpeg">
+                <input type="text"  name="hinhAnh" id="m-loction-img" th:value="${brand}?${brand.hinhAnh}:null">
+                <span class="errorMessage"></span>
+            </div>
+            <div class="form-group">
+                <label for="moTa">Mô tả</label>
+                <textarea name="moTa" id="moTa" class="form-control" rows="5"
+                          th:utext="${brand} ? ${brand.moTa} : null"></textarea>
+                <span class="errorMessage"></span>
+            </div>
+
+
+            <div class="d-flex justify-content-end btn-add-product">
+                <button type="submit" class="btn btn-dark" id="m-btn-add-brand" th:text="${banner}" >Thêm sản phẩm</button>
+                <button type="button" class="btn btn-dark ml-5 click-cancel">Quay lại</button>
+            </div>
+        </form>
+    </div>
+</div>
+<th:block id="footResourses">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script th:src="@{/admin/js2/brand.js}"></script>
+    <script th:src="@{/user/js/validation.js}"></script>
+</th:block>
+</body>
+</html>

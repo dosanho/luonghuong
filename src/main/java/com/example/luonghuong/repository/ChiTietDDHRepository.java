@@ -11,4 +11,5 @@ public interface ChiTietDDHRepository extends JpaRepository<ChiTietDDHEntity,Lon
 
     @Transactional
     void deleteAllBySanPhamEntityChiTietDDH(SanPhamEntity sanPhamEntity);
+
 }
