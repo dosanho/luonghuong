@@ -35,11 +35,13 @@ public class ThuongHieuAPI {
     // thêm sản phẩm method post
     @PostMapping("/brand")
     public Long addBrand(@RequestBody ThuongHieuDTO thuongHieuDTO){
+        // trả về id của thương hiệu
         return thuongHieuService.addOrEditBrand(thuongHieuDTO);
     }
     // sửa sản phẩm method put
     @PutMapping("/brand")
     public Long editBrand(@RequestBody ThuongHieuDTO thuongHieuDTO){
+        // trả về id của thương hiệu
         return thuongHieuService.addOrEditBrand(thuongHieuDTO);
     }
 

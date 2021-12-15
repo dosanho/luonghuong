@@ -117,7 +117,7 @@ public class ThuongHieuServiceImpl implements ThuongHieuService {
     public Boolean deleteBrand(Long id) {
 
             // tìm sản phẩm
-            List<Long> sanPhamListId =  this.sanPhamRepository.getIdByMaThuongHieuAndMaSanPhamCha(id);
+            List<Long> sanPhamListId =  this.sanPhamRepository.getIdByMaThuongHieu(id);
             sanPhamListId.forEach(e->{
                         // xoá sản phẩm có thương hiệu muốn xoá
                         sanPhamService.xoaSanPham(e);

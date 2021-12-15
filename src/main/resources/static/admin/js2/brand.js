@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    // lấy dữ liệu trong ckeditor
     var moTa = '';
     $(document).ready(function(){
         moTa = CKEDITOR.replace('moTa');
@@ -43,14 +44,12 @@ $(document).ready(function () {
         ],
         onSubmit : function(data){
             data["moTa"] = moTa.getData()
-            console.log(data)
 
             if (data['id']){
                 suaThuongHieu(data)
             } else {
                 themThuongHieu(data)
             }
-
         }
 
     })

@@ -19,5 +19,5 @@ public interface SanPhamRepository extends JpaRepository<SanPhamEntity,Long> {
     Integer countByMaSanPhamChaSP(SanPhamEntity sanPhamEntity);
 
     @Query("select s.id from SanPhamEntity s where s.maThuongHieuSP.id = :brandId")
-    List<Long> getIdByMaThuongHieuAndMaSanPhamCha(Long brandId);
+    List<Long> getIdByMaThuongHieu(Long brandId);
 }

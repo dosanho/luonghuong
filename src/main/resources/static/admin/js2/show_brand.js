@@ -6,7 +6,6 @@ $(document).ready(function () {
             contentType:"application/json",
             success:function (result){
                 pagination(+ result)
-
             }
         })
     //
@@ -24,7 +23,6 @@ $(document).ready(function () {
                         dataType:'Json',
                         data:{page},
                         success:function (result){
-                            console.log(result)
                             let index = 1;
                             let html = '';
                             result.forEach(e=>{
